@@ -11,5 +11,7 @@ public interface BalanceSheetService {
 
     public List<BalanceSheetEntry> getBalanceSheetEntriesByYear(int year) ;
 
+    public List<BalanceSheetEntry> getBalanceSheetForProvider(String accountingProvider);
+
 
 }

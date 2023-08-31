@@ -18,6 +18,17 @@ public class BalanceSheetEntry {
     private double profitOrLoss;
     private double assetsValue;
 
+    public BalanceSheetEntry(int i, int i1, int i2, int i3) {
+    }
+
+    public BalanceSheetEntry(Long id, int year, int month, double profitOrLoss, double assetsValue) {
+        this.id = id;
+        this.year = year;
+        this.month = month;
+        this.profitOrLoss = profitOrLoss;
+        this.assetsValue = assetsValue;
+    }
+
     public Long getId() {
         return id;
     }

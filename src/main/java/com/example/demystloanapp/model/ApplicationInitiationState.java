@@ -14,6 +14,14 @@ public class ApplicationInitiationState {
 
     private boolean initiated;
 
+    public ApplicationInitiationState() {
+    }
+
+    public ApplicationInitiationState(Long id, boolean initiated) {
+        this.id = id;
+        this.initiated = initiated;
+    }
+
     public Long getId() {
         return id;
     }

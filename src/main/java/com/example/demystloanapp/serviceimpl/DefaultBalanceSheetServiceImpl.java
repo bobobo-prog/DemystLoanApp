@@ -12,6 +12,7 @@ import java.util.List;
 
 @Service
 public class DefaultBalanceSheetServiceImpl implements BalanceSheetService {
+
     @Autowired
     private BalanceSheetEntryRepository balanceSheetEntryRepository;
 
@@ -30,6 +31,22 @@ public class DefaultBalanceSheetServiceImpl implements BalanceSheetService {
     }
         return res;
 
+    }
+
+    public List<BalanceSheetEntry> getBalanceSheetForProvider(String accountingProvider) {
+
+        return createSampleBalanceSheet(accountingProvider);
+    }
+
+    private List<BalanceSheetEntry> createSampleBalanceSheet(String accountingProvider) {
+
+        List<BalanceSheetEntry> res = new ArrayList<>();
+        res.add(new BalanceSheetEntry(2020, 12, 250000, 1234));
+        res.add(new BalanceSheetEntry(2020, 11, 1150, 5789));
+        res.add(new BalanceSheetEntry(2020, 10, 2500, 22345));
+        res.add(new BalanceSheetEntry(2020, 9, -187000, 223452));
+
+        return res;
     }
 
 
