@@ -1,5 +1,8 @@
 package com.example.demystloanapp.DemystLoanApp.api.controller;
 
+import com.example.demystloanapp.DemystLoanApp.api.dtos.AccountingProviderDto;
+import com.example.demystloanapp.DemystLoanApp.api.dtos.ApiResponse;
+import com.example.demystloanapp.DemystLoanApp.api.dtos.LoanApplicationDto;
 import com.example.demystloanapp.DemystLoanApp.api.model.BusinessDetails;
 import com.example.demystloanapp.DemystLoanApp.api.model.LoanApplication;
 import com.example.demystloanapp.DemystLoanApp.api.service.*;
@@ -11,10 +14,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:4200")
 public class LoanApplicationController {
 
     @Autowired
@@ -31,31 +36,23 @@ public class LoanApplicationController {
 
 
     @PostMapping("/loan-applications/submit")
-    public ResponseEntity<LoanApplication> submitLoanApplication(@RequestBody LoanApplication application) {
-        LoanApplication submittedApplication = loanApplicationService.submitLoanApplication(application);
-        return ResponseEntity.status(HttpStatus.CREATED).body(submittedApplication);
-    }
-
-    @GetMapping("/balance-sheet-entries/{year}")
-    public List<BalanceSheetEntry> getBalanceSheetEntriesByYear(@PathVariable int year) {
-        return balanceSheetService.getBalanceSheetEntriesByYear(year);
+    public ResponseEntity<ApiResponse> submitLoanApplication(@RequestBody LoanApplicationDto application) {
+            LoanApplication submittedApplication = loanApplicationService.submitLoanApplication(application);
+        ApiResponse response = new ApiResponse("Loan Application submitted successfully");
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping("/initiate-application")
-    public ResponseEntity<String> initiateApplication() {
+    public ResponseEntity<ApiResponse> initiateApplication() {
         initiationService.initiateApplication();
-        return ResponseEntity.status(HttpStatus.OK).body("Application initiated successfully.");
+        ApiResponse response = new ApiResponse("Application initiated successfully");
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @PostMapping("/save-business-details")
-    public ResponseEntity<String> fillBusinessDetails(@RequestBody BusinessDetails details) {
-        businessDetailsService.saveBusinessDetails(details);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Business details saved successfully.");
-    }
-
-    @GetMapping("/get-balance-sheet")
-    public ResponseEntity<List<BalanceSheetEntry>> getBalanceSheet(@RequestParam String accountingProvider) {
-        List<BalanceSheetEntry> balanceSheet = balanceSheetService.getBalanceSheetForProvider(accountingProvider);
+    @PostMapping("/get-balance-sheet/submit")
+    public ResponseEntity<List<BalanceSheetEntry>> getBalanceSheet(@RequestBody AccountingProviderDto accountingProvider) {
+        List<BalanceSheetEntry> balanceSheet = balanceSheetService.getBalanceSheetForProvider(accountingProvider.getAccountingProvider());
         return ResponseEntity.status(HttpStatus.OK).body(balanceSheet);
     }
 

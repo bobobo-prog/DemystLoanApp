@@ -34,6 +34,9 @@ public class BalanceSheetEntry {
         this.assetsValue = assetsValue;
     }
 
+    public BalanceSheetEntry(int i, int i1, int i2, int i3) {
+    }
+
     public Long getId() {
         return id;
     }

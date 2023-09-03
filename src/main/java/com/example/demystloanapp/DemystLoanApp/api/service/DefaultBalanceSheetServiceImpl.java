@@ -17,34 +17,20 @@ public class DefaultBalanceSheetServiceImpl  {
     private BalanceSheetEntryRepository balanceSheetEntryRepository;
 
 
-    public List<BalanceSheetEntry> getBalanceSheetEntriesByYear(int year) {
-        List<BalanceSheetEntry> res = new ArrayList<>();
-    try{
-
-        //res = balanceSheetEntryRepository.findByYear(year);
-
-
-    }
-    catch(Exception e )
-    {
-       // logger.error("gg");
-    }
-        return res;
-
-    }
-
     public List<BalanceSheetEntry> getBalanceSheetForProvider(String accountingProvider) {
 
         return createSampleBalanceSheet(accountingProvider);
     }
 
     private List<BalanceSheetEntry> createSampleBalanceSheet(String accountingProvider) {
-
         List<BalanceSheetEntry> res = new ArrayList<>();
-//        res.add(new BalanceSheetEntry(2020, 12, 250000, 1234));
-//        res.add(new BalanceSheetEntry(2020, 11, 1150, 5789));
-//        res.add(new BalanceSheetEntry(2020, 10, 2500, 22345));
-//        res.add(new BalanceSheetEntry(2020, 9, -187000, 223452));
+        if(accountingProvider!=null) {
+
+            res.add(new BalanceSheetEntry(2020, 12, 250000, 1234));
+            res.add(new BalanceSheetEntry(2020, 11, 1150, 5789));
+            res.add(new BalanceSheetEntry(2020, 10, 2500, 22345));
+            res.add(new BalanceSheetEntry(2020, 9, -187000, 223452));
+        }
 
         return res;
     }

@@ -1,5 +1,48 @@
-<div class="container">
-  <h2>Loan Application</h2>
-  <button (click)="initiateApplication()">Initiate Loan Application</button>
-  <div *ngIf="applicationInitiated">{{ successMessage }}</div>
-</div>
+<!DOCTYPE html>
+<html>
+<body>
+  <div class="container">
+    <h2>Loan Application</h2>
+    <button (click)="initiateApplication()">Initiate Loan Application</button>
+    <div *ngIf="applicationInitiated">
+      <h1>
+        {{ successMessage }}
+      </h1>
+    </div>
+
+    <div *ngIf="successMessage && successMessage!=''">
+      <form [formGroup]="businessDetailsForm" (ngSubmit)="submitForm()">
+        <label for="businessName">Business Name:</label>
+        <input type="text" id="businessName" formControlName="businessName" required>
+      
+        <label for="yearEstablished">Year Established:</label>
+        <input type="number" id="yearEstablished" formControlName="yearEstablished" required>
+      
+        <label for="loanAmount">Loan Amount:</label>
+        <input type="number" id="loanAmount" formControlName="loanAmount" required>
+      
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+
+    <div>
+      <div *ngIf="successMessage">
+        
+      
+        <form [formGroup]="accountingForm" (ngSubmit)="requestBalanceSheet()">
+          <label for="accountingProvider">Select Accounting Provider:</label>
+          <select id="accountingProvider" formControlName="selectedProvider">
+            <option value="Xero">Xero</option>
+            <option value="MYOB">MYOB</option>
+          </select>
+      
+          <button type="submit">Request Balance Sheet</button>
+        </form>
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+</html>

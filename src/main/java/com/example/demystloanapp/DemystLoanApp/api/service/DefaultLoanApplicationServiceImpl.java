@@ -1,6 +1,7 @@
 package com.example.demystloanapp.DemystLoanApp.api.service;
 
 
+import com.example.demystloanapp.DemystLoanApp.api.dtos.LoanApplicationDto;
 import com.example.demystloanapp.DemystLoanApp.api.repository.LoanApplicationRepository;
 import com.example.demystloanapp.DemystLoanApp.api.service.DefaultLoanApplicationServiceImpl;
 import com.example.demystloanapp.DemystLoanApp.api.model.LoanApplication;
@@ -14,9 +15,13 @@ public class DefaultLoanApplicationServiceImpl  {
     private LoanApplicationRepository loanApplicationRepository;
 
 
-    public LoanApplication submitLoanApplication(LoanApplication application) {
+    public LoanApplication submitLoanApplication(LoanApplicationDto application) {
 
-        return loanApplicationRepository.save(application);
+        LoanApplication  app = new LoanApplication();
+        app.setBusinessName(application.getBusinessName());
+        app.setYearEstablished(application.getYearEstablished());
+        app.setLoanAmount(application.getLoanAmount());
+        return loanApplicationRepository.save(app);
     }
 
 
