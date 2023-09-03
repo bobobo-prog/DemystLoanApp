@@ -1,0 +1,5 @@
+<div class="container">
+  <h2>Loan Application</h2>
+  <button (click)="initiateApplication()">Initiate Loan Application</button>
+  <div *ngIf="applicationInitiated">{{ successMessage }}</div>
+</div>
