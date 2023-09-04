@@ -8,12 +8,16 @@ import com.example.demystloanapp.DemystLoanApp.api.model.LoanApplication;
 import com.example.demystloanapp.DemystLoanApp.api.service.*;
 import com.example.demystloanapp.DemystLoanApp.api.model.BalanceSheetEntry;
 import com.example.demystloanapp.DemystLoanApp.api.service.DefaultBalanceSheetServiceImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.service.spi.InjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,11 +38,23 @@ public class LoanApplicationController {
     @Autowired
     private DefaultBusinessDetailsService businessDetailsService;
 
+    ObjectMapper objectMapper = new ObjectMapper();
 
     @PostMapping("/loan-applications/submit")
-    public ResponseEntity<ApiResponse> submitLoanApplication(@RequestBody LoanApplicationDto application) {
-            LoanApplication submittedApplication = loanApplicationService.submitLoanApplication(application);
-        ApiResponse response = new ApiResponse("Loan Application submitted successfully");
+    public ResponseEntity<ApiResponse> submitLoanApplication(@RequestBody String json) throws JsonProcessingException {
+
+        Integer preAssessment = 0;
+        try{
+            LoanApplicationDto application = objectMapper.readValue(json, new TypeReference<LoanApplicationDto>() {});
+
+             preAssessment = loanApplicationService.submitLoanApplication(application);
+        }
+        catch (Exception e)
+        {
+            System.out.println("ff");
+        }
+        ApiResponse response = new ApiResponse("Loan Application submitted successfully , Loan favoured to be approved " + String.valueOf(preAssessment) + "% of the requested amount");
+
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -50,10 +66,21 @@ public class LoanApplicationController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @PostMapping("/get-balance-sheet/submit")
-    public ResponseEntity<List<BalanceSheetEntry>> getBalanceSheet(@RequestBody AccountingProviderDto accountingProvider) {
-        List<BalanceSheetEntry> balanceSheet = balanceSheetService.getBalanceSheetForProvider(accountingProvider.getAccountingProvider());
-        return ResponseEntity.status(HttpStatus.OK).body(balanceSheet);
+    @PostMapping ("/get-balance-sheet/submit")
+    public ResponseEntity<List<BalanceSheetEntry>> getBalanceSheet(@RequestParam String accountingProvider) {
+
+        List<BalanceSheetEntry> balanceSheet = new ArrayList<>();
+        try{
+            balanceSheet = balanceSheetService.getBalanceSheetForProvider(accountingProvider);
+
+        }
+        catch (Exception e)
+        {
+            System.out.println("ggg");
+
+        }
+        return ResponseEntity.ok(balanceSheet);
+
     }
 
 

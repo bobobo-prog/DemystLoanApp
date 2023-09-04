@@ -1,41 +1,36 @@
 package com.example.demystloanapp.DemystLoanApp.api.dtos;
 
+import com.example.demystloanapp.DemystLoanApp.api.model.BalanceSheetEntry;
+
+import java.util.List;
+
 public class LoanApplicationDto {
 
-    private String businessName;
-    private Integer yearEstablished;
-    private Integer loanAmount;
+    private FormDataDto formData;
+    private List<BalanceSheetEntryDto> balanceSheetEntries;
+
 
     public LoanApplicationDto() {
     }
 
-    public LoanApplicationDto(String businessName, Integer yearEstablished, Integer loanAmount) {
-        this.businessName = businessName;
-        this.yearEstablished = yearEstablished;
-        this.loanAmount = loanAmount;
+    public LoanApplicationDto(FormDataDto formData, List<BalanceSheetEntryDto> balanceSheetEntries) {
+        this.formData = formData;
+        this.balanceSheetEntries = balanceSheetEntries;
     }
 
-    public String getBusinessName() {
-        return businessName;
+    public FormDataDto getFormData() {
+        return formData;
     }
 
-    public void setBusinessName(String businessName) {
-        this.businessName = businessName;
+    public void setFormData(FormDataDto formData) {
+        this.formData = formData;
     }
 
-    public Integer getYearEstablished() {
-        return yearEstablished;
+    public List<BalanceSheetEntryDto> getBalanceSheetEntries() {
+        return balanceSheetEntries;
     }
 
-    public void setYearEstablished(Integer yearEstablished) {
-        this.yearEstablished = yearEstablished;
-    }
-
-    public Integer getLoanAmount() {
-        return loanAmount;
-    }
-
-    public void setLoanAmount(Integer loanAmount) {
-        this.loanAmount = loanAmount;
+    public void setBalanceSheetEntries(List<BalanceSheetEntryDto> balanceSheetEntries) {
+        this.balanceSheetEntries = balanceSheetEntries;
     }
 }

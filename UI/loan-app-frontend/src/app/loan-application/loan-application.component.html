@@ -20,16 +20,19 @@
       
         <label for="loanAmount">Loan Amount:</label>
         <input type="number" id="loanAmount" formControlName="loanAmount" required>
-      
-        <button type="submit">Submit</button>
+        
+        <div *ngIf="balanceSheetFlag">
+          <button type="submit">Submit</button>   
+        </div>
+       
       </form>
     </div>
 
     <div>
-      <div *ngIf="successMessage">
+      <div *ngIf="successMessage">  
         
       
-        <form [formGroup]="accountingForm" (ngSubmit)="requestBalanceSheet()">
+        <form [formGroup]="accountingForm" (ngSubmit)="requestBalanceSheet($event)">
           <label for="accountingProvider">Select Accounting Provider:</label>
           <select id="accountingProvider" formControlName="selectedProvider">
             <option value="Xero">Xero</option>
@@ -40,6 +43,27 @@
         </form>
       </div>
 
+    </div>
+
+    <div  *ngIf="balanceSheetFlag">
+      <table>
+        <thead>
+          <tr>
+            <th>Year</th>
+            <th>Month</th>
+            <th>Profit/Loss</th>
+            <th>Assets Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let entry of balanceSheetEntries">
+            <td>{{ entry.year }}</td>
+            <td>{{ entry.month }}</td>    
+            <td>{{ entry.profitOrLoss }}</td>
+            <td>{{ entry.assetsValue }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
   </div>

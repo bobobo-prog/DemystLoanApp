@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {HttpClient} from '@angular/common/http'
+import {HttpClient, HttpResponse} from '@angular/common/http'
 import { environment } from 'src/environments/environment';
 import { InitiateApiResponse } from 'src/app/shared/models/api-response.model';
 import { FormBuilder, FormGroup, Validators  } from '@angular/forms';
+import { BalanceSheetApiResponse } from '../shared/models/api-balance-sheet-response.model';
 @Component({
   selector: 'app-loan-application',
   templateUrl: './loan-application.component.html',
@@ -11,9 +12,10 @@ import { FormBuilder, FormGroup, Validators  } from '@angular/forms';
 export class LoanApplicationComponent implements OnInit {
   applicationInitiated = false;
   applicationSubmitted = true;
+  balanceSheetFlag = false;
   successMessage = '';
   private baseUrl = 'http://localhost:8080/api';
-
+  balanceSheetEntries: BalanceSheetApiResponse[]= [];
   businessDetailsForm: FormGroup = new FormGroup({});
   accountingForm: FormGroup = new FormGroup({});
   
@@ -31,6 +33,7 @@ export class LoanApplicationComponent implements OnInit {
     this.accountingForm = this.formBuilder.group({
       selectedProvider: ['', Validators.required]
     });
+
     
   }
 
@@ -53,28 +56,45 @@ export class LoanApplicationComponent implements OnInit {
     if (this.businessDetailsForm.valid) {
       
       const formData = this.businessDetailsForm.value;
-      this.http.post(`${this.baseUrl}/loan-applications/submit`, formData ).subscribe(
+
+      const requestBody = {
+        formData,
+        balanceSheetEntries: this.balanceSheetEntries
+      };    
+
+      console.log(requestBody); 
+
+      this.http.post(`${this.baseUrl}/loan-applications/submit`, JSON.stringify(requestBody)).subscribe(
         (response) => {
           this.applicationSubmitted = true;
           this.successMessage = (response as InitiateApiResponse).message;
-        },
+        },    
         (error) => {
           console.error('Error submitting loan application:', error);
         }
-      );
+      );    
     }
-  }
+  }   
 
-  requestBalanceSheet() {
-    
+  requestBalanceSheet(event: Event) {
+    event.preventDefault();
     if (this.accountingForm.valid) {
                           
-      const formData = this.accountingForm.value;
-      console.log(formData);
-      this.http.post(`${this.baseUrl}/get-balance-sheet`,formData).subscribe(
+      const selectedProvider = this.accountingForm.get('selectedProvider')?.value;        
+      this.http.post<HttpResponse<BalanceSheetApiResponse[]>>(`${this.baseUrl}/get-balance-sheet/submit?accountingProvider=${selectedProvider}`,{}).subscribe(
         (response) => {
-          
-          console.log('Balance sheet received:', response);
+         
+            if( response && Array.isArray(response))
+            {
+              this.balanceSheetEntries = response;  
+              this.balanceSheetFlag = true;
+            }
+            else {
+              console.error('Invalid response format:', response);
+            }
+            
+        
+          console.log('Balance sheet received:', this.balanceSheetEntries);
         },
         (error) => {
           
